@@ -17,10 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.nio.Buffer;
+
 public class DbActivity extends AppCompatActivity {
 
     SQLiteDatabase db = null;
-    EditText  e2, e3,e4;
+    EditText  e2, e3,e4 ,search;
 
     int recordId=0;
 
@@ -35,8 +37,7 @@ public class DbActivity extends AppCompatActivity {
         e2 = findViewById(R.id.e2);
         e3 = findViewById(R.id.e3);
         e4 = findViewById(R.id.e4);
-
-            low();
+        search = findViewById(R.id.search);
     }
 
     public void button(View v){
@@ -64,7 +65,7 @@ public class DbActivity extends AppCompatActivity {
 
     }
 
-    public void low(){
+    public void display(View v){
         LinearLayout linearLayout = findViewById(R.id.linearLayout); // Assuming your parent layout is a LinearLayout
 
         try {
@@ -180,6 +181,37 @@ public class DbActivity extends AppCompatActivity {
         }
     }
 
+    public void search(View v){
+
+    LinearLayout lv = findViewById(R.id.linearLayout);
+    lv.setOrientation(LinearLayout.HORIZONTAL);
+
+    int searchId = Integer.parseInt(search.getText().toString());
+        try{
+            String qry = "SELECT * from EMPIN Where id="+searchId;
+            Cursor c = db.rawQuery(qry,null);
+
+            TextView tv = new TextView(this);
+
+            if(c.getCount() == 0){
+                Toast.makeText(this, "no record",Toast.LENGTH_SHORT).show();
+            }else{
+                if(c.moveToFirst()){
+                    StringBuffer buffer = new StringBuffer();
+                    buffer.append("id:"+c.getString(0).toString()+"\n");
+                    buffer.append("name:"+c.getString(1).toString()+"\n");
+                    buffer.append("address:"+c.getString(2).toString()+"\n");
+                    buffer.append("dept:"+c.getString(3).toString()+"\n");
+
+                    tv.setText(buffer.toString());
+                    lv.addView(tv);
+                }
+            }
+
+        }catch(SQLException e){
+            Log.d("searchError",String.valueOf(e));
+        }
+    }
 
 
 }
