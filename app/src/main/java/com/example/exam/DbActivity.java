@@ -67,7 +67,7 @@ public class DbActivity extends AppCompatActivity {
 
     public void display(View v){
         LinearLayout linearLayout = findViewById(R.id.linearLayout); // Assuming your parent layout is a LinearLayout
-
+        linearLayout.removeAllViews();
         try {
             String viewQry = "SELECT * from EMPIN";
             Cursor c = db.rawQuery(viewQry, null);
@@ -79,6 +79,7 @@ public class DbActivity extends AppCompatActivity {
                     // Create a new LinearLayout for each record
                     LinearLayout rowLayout = new LinearLayout(this);
                     rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+
 
                     // Create a new TextView for each record
                     TextView tv = new TextView(this);
@@ -183,8 +184,11 @@ public class DbActivity extends AppCompatActivity {
 
     public void search(View v){
 
+
     LinearLayout lv = findViewById(R.id.linearLayout);
-    lv.setOrientation(LinearLayout.HORIZONTAL);
+    lv.setOrientation(LinearLayout.VERTICAL);
+
+    lv.removeAllViews();
 
     int searchId = Integer.parseInt(search.getText().toString());
         try{
@@ -192,6 +196,7 @@ public class DbActivity extends AppCompatActivity {
             Cursor c = db.rawQuery(qry,null);
 
             TextView tv = new TextView(this);
+
 
             if(c.getCount() == 0){
                 Toast.makeText(this, "no record",Toast.LENGTH_SHORT).show();
@@ -205,6 +210,8 @@ public class DbActivity extends AppCompatActivity {
 
                     tv.setText(buffer.toString());
                     lv.addView(tv);
+
+                    buffer.setLength(0);
                 }
             }
 
